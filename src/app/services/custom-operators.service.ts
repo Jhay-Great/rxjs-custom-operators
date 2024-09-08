@@ -27,6 +27,20 @@ export class CustomOperatorsService {
     )
   }
 
+  multiplyByFactor (source$:Observable<any>, factor:number) {
+    return source$.pipe(
+      filter(
+        value => typeof value === 'number',
+      ),
+      map(
+        value => value * factor,
+      ),
+      tap(data => {
+        console.log('logging value: ', data);
+      })
+    )
+  }
+
 
   private multiply (factor:number) {
     return (source$:Observable<any>) => new Observable<any>((observer) => {
