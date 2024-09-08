@@ -8,6 +8,26 @@ export class CustomOperatorsService {
   
   constructor() { }
   
+  multiplication (number:Observable<any>, factor:Observable<any>): Observable<number> {
+    return combineLatest([number, factor]).pipe(
+      tap(data => {
+        // console.log(data);
+      }),
+      map(([value1, value2]) => {
+        console.log(typeof value1, value2)
+        if (typeof value1 !== 'number' || typeof value2 !== 'number') {
+          throw new Error(`${value1 || value2} is not a number`);
+        }
+        return value1 * value2;
+      }),
+      catchError(error => {
+        console.log(error);
+        return of(error.message);
+      })
+    )
+  }
+
+
   private multiply (factor:number) {
     return (source$:Observable<any>) => new Observable<any>((observer) => {
       let accumulated:number[] = [];
@@ -26,21 +46,6 @@ export class CustomOperatorsService {
       return subscription;
       
     })
-  }
-
-  multiplication (number:Observable<number>, factor:Observable<number>): Observable<number> {
-    return combineLatest([number, factor]).pipe(
-      map(([value1, value2]) => {
-        if (typeof value1 !== 'number' || typeof value2 !== 'number') {
-          throw new Error(`${value1 || value2} is not a number`);
-        }
-        return value1 * value2;
-      }),
-      catchError(error => {
-        console.log(error);
-        return of(error.message);
-      })
-    )
   }
 
   product (source$:Observable<any>, factor=3) {
