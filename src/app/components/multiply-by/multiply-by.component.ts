@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
-// import { CustomOperatorService } from '../../src/app/services/custom-operator.service';
+// import { CustomOperatorServiceService } from '../../src/app/services/custom-operator.service';
 import { CustomOperatorsService } from '../../services/custom-operators.service';
 import { debounceTime, fromEvent, map, Observable, tap } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -17,7 +17,7 @@ export class MultiplyByComponent implements OnInit {
   initialValue!:Observable<number>;
 
   constructor (
-    private customOperator: CustomOperatorsService,
+    private customOperatorService: CustomOperatorsService,
     private elementRef: ElementRef,
   ) {};
 
@@ -39,21 +39,36 @@ export class MultiplyByComponent implements OnInit {
     // .subscribe();
     
 
-    const sourceFactor$ = fromEvent(multiplyByFactor, 'input').pipe(
+    const sourceFactor = fromEvent(multiplyByFactor, 'input').pipe(
       debounceTime(300),
       map(event => {
         const factorTarget = multiplyByFactor.value as HTMLInputElement
         console.log(factorTarget);
         // factor = factorTarget;
-        // return factorTarget;
+        return +factorTarget;
         
       })
     )
-    .subscribe();
+    // .subscribe();
+
+    this.number = this.customOperatorService.multiplication(this.initialValue, sourceFactor);
+
+
+    // const sourceFactor = fromEvent<InputEvent>(multiplyByFactor, 'input').pipe(
+    //   debounceTime(300),
+    //   map((event: InputEvent) => {
+    //     const inputElement = event.target as HTMLInputElement;
+    //     const factor = Number(inputElement.value); // Convert the value to a number
+    //     console.log(factor); // Log the number
+    //     return factor; // Return the number to be used downstream
+    //   })
+    // );
+    
+    
 
     
-    // this.number = this.customOperator.byTwo()
-    this.number = this.customOperator.product(this.initialValue)
+    // this.number = this.customOperatorService.byTwo()
+    // this.number = this.customOperatorService.product(this.initialValue, sourceFactor)
   }
 
 }

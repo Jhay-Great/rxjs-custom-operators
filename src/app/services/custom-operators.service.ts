@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { map, filter, pipe, Observable, of, from, tap, catchError } from 'rxjs';
+import { map, filter, pipe, Observable, of, from, tap, catchError, combineLatest } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -52,6 +52,26 @@ export class CustomOperatorsService {
       return subscription;
       
     })
+  }
+
+  multiplication (number:Observable<number>, factor:Observable<number>): Observable<number> {
+    return combineLatest([number, factor]).pipe(
+      // filter(([value1, value2]) => {
+      //   const val = value1 % 2 === 0 ? value1 : null;
+      //   const val2 = value2 % 2 === 0 ? value2 : null;
+      //   return [val, val2];
+      // }),
+      map(([value1, value2]) => {
+        if (typeof value1 !== 'number' || typeof value2 !== 'number') {
+          throw new Error(`${value1 || value2} is not a number`);
+        }
+        return value1 * value2;
+      }),
+      catchError(error => {
+        console.log(error);
+        return of(error.message);
+      })
+    )
   }
 
   product (source$:Observable<any>, factor=3) {
