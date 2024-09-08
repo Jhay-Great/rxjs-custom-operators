@@ -6,34 +6,34 @@ import { map, filter, pipe, Observable, of, from, tap, catchError } from 'rxjs';
 })
 export class CustomOperatorsService {
 
-  arr = of(1,'d',3,4,2,5,'a');
+  // arr = of(1,3,4,2,5,'a');
   // arr = from([4,2]);
 
   constructor() { }
 
-  private multiplyBy () {
-    return pipe(
-      filter((digit:number) => digit % 2 === 0),
-      tap(data => {
-        console.log(data)
-      }),
-      map((digit:number) => digit * 2),
-      tap(data => console.log(data))
-    )
-  }
+  // private multiplyBy () {
+  //   return pipe(
+  //     filter((digit:number) => digit % 2 === 0),
+  //     tap(data => {
+  //       console.log(data)
+  //     }),
+  //     map((digit:number) => digit * 2),
+  //     tap(data => console.log(data))
+  //   )
+  // }
 
-  product () {
-    return pipe(
-      filter(
-        (digit:number) => digit % 2 === 0
-      ),
-      tap(data => {
-        console.log(data);
-      })
-    )
-  }
+  // product () {
+  //   return pipe(
+  //     filter(
+  //       (digit:number) => digit % 2 === 0
+  //     ),
+  //     tap(data => {
+  //       console.log(data);
+  //     })
+  //   )
+  // }
 
-  multiply (factor:number) {
+  private multiply (factor:number) {
     return (source$:Observable<any>) => new Observable<any>((observer) => {
       // next: (value <T>) => observer.next(value);
       let accumulated:number[] = [];
@@ -54,50 +54,36 @@ export class CustomOperatorsService {
     })
   }
 
-  multipleByTen () {
-    return (source$:Observable<number>) => source$.pipe(
-      map(data => data * 10),
-    );
-  }
-
-  // source$ = new Observable<number>(observer => {
-  //   next: (value:number) => observer.next(value);
-  //   error: (error:string) => observer.error('failed');
-  //   complete: () => 'completed';
-  // })
-
-  discardOddDoubleEven() {
-    return pipe(
-      filter((v:number) => !(v % 2)),
+  product (source$:Observable<any>, factor=3) {
+    return source$.pipe(
       tap(data => {
-        console.log(data);
+        console.log('source data: ', data);
       }),
-      map((v) => v + v),
-      tap(data => console.log(data))
-    );
-  }
-
-
-  byTwo () {
-    return this.arr.pipe(
-      // this.multiplyBy()
-      // this.discardOddDoubleEven(),
-      // this.product(),
-      // this.multipleByTen(),
-      tap(data => {
-        console.log(data);
-      }),
-      this.multiply(3),
-      // tap(data => {
-      //   console.log('in by two: ', data);
-      // }),
-      catchError(error => {
-        console.log(error);
-        return of(error.message);
-      })
+      this.multiply(factor),
     )
-    // return 
   }
+
+
+  // byTwo () {
+  //   return this.arr.pipe(
+  //     // this.multiplyBy()
+  //     // this.discardOddDoubleEven(),
+  //     // this.product(),
+  //     // this.multipleByTen(),
+  //     tap(data => {
+  //       console.log(data);
+  //     }),
+  //     this.multiply(3),
+  //     // tap(data => {
+  //     //   console.log('in by two: ', data);
+  //     // }),
+  //     catchError(error => {
+  //       console.log(error);
+  //       return of(error.message);
+  //     })
+  //   )
+  //   // return 
+  // }
   
   
 }
