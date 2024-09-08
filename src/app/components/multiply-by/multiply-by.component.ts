@@ -13,8 +13,8 @@ import { CommonModule } from '@angular/common';
 })
 export class MultiplyByComponent implements OnInit {
 
-  number!:Observable<number>;
-  initialValue!:Observable<number>;
+  number$!:Observable<number>;
+  initialValue$!:Observable<number>;
 
   constructor (
     private customOperatorService: CustomOperatorsService,
@@ -22,53 +22,31 @@ export class MultiplyByComponent implements OnInit {
   ) {};
 
   ngOnInit(): void {
-    const inputNumber = this.elementRef.nativeElement.querySelector('#number');
+    const inputNumber = this.elementRef.nativeElement.querySelector('#number'); // using elementRef to get elements scoped to this component
     const multiplyByFactor = this.elementRef.nativeElement.querySelector('#factor');
 
-    
 
-    this.initialValue = fromEvent(inputNumber, 'input').pipe(
+    this.initialValue$ = fromEvent<InputEvent>(inputNumber, 'input').pipe(
       debounceTime(500),
-      map(event => { 
-        const target = inputNumber.value as HTMLInputElement
-        console.log('input value: ', target);
-        return +target;
-        
+      map((event: InputEvent) => { 
+        const inputElement = event.target as HTMLInputElement;
+        const inputValue = +inputElement.value;
+        return inputValue;
       })
     )
-    // .subscribe();
-    
 
-    const sourceFactor = fromEvent(multiplyByFactor, 'input').pipe(
+    const sourceFactor$ = fromEvent<InputEvent>(multiplyByFactor, 'input').pipe(
       debounceTime(300),
-      map(event => {
-        const factorTarget = multiplyByFactor.value as HTMLInputElement
-        console.log(factorTarget);
-        // factor = factorTarget;
-        return +factorTarget;
-        
+      map((event:InputEvent) => {
+        const factorTarget = event.target as HTMLInputElement
+        const factor = +factorTarget.value;
+        return factor;
       })
     )
-    // .subscribe();
 
-    this.number = this.customOperatorService.multiplication(this.initialValue, sourceFactor);
+    this.number$ = this.customOperatorService.multiplication(this.initialValue$, sourceFactor$);
 
 
-    // const sourceFactor = fromEvent<InputEvent>(multiplyByFactor, 'input').pipe(
-    //   debounceTime(300),
-    //   map((event: InputEvent) => {
-    //     const inputElement = event.target as HTMLInputElement;
-    //     const factor = Number(inputElement.value); // Convert the value to a number
-    //     console.log(factor); // Log the number
-    //     return factor; // Return the number to be used downstream
-    //   })
-    // );
-    
-    
-
-    
-    // this.number = this.customOperatorService.byTwo()
-    // this.number = this.customOperatorService.product(this.initialValue, sourceFactor)
   }
 
 }
