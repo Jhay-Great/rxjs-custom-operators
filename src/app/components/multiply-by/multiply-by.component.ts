@@ -30,7 +30,7 @@ export class MultiplyByComponent implements OnInit {
       debounceTime(700),
       map((event: InputEvent) => { 
         const inputElement = event.target as HTMLInputElement;
-        const inputValue = +inputElement.value; // type cast value to a number
+        const inputValue = inputElement.value; // type cast value to a number
         return inputValue;
       })
     )
@@ -39,7 +39,7 @@ export class MultiplyByComponent implements OnInit {
       debounceTime(300),
       map((event:InputEvent) => {
         const factorTarget = event.target as HTMLInputElement
-        const factor = +factorTarget.value; // type cast value to a number
+        const factor = factorTarget.value; // type cast value to a number
         return factor;
       })
     )

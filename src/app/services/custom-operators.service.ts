@@ -14,11 +14,18 @@ export class CustomOperatorsService {
         // console.log(data);
       }),
       map(([value1, value2]) => {
+        const number = Number(value1);  // Ensure both values are converted to numbers
+      const factor = Number(value2);
         console.log(typeof value1, value2)
-        if (typeof value1 !== 'number' || typeof value2 !== 'number') {
-          throw new Error(`${value1 || value2} is not a number`);
+        // if (typeof value1 !== 'number' || typeof value2 !== 'number') {
+        if (isNaN(number)) {
+          throw new Error(`${value1} is not a number`);
         }
-        return value1 * value2;
+        if (isNaN(factor)) {
+          throw new Error(`${value2} is not a number`);
+
+        }
+        return number * factor;
       }),
       catchError(error => {
         console.log(error);
