@@ -1,12 +1,26 @@
 
-<input type="text" name="number" id="number">
+<div class="number">
+    <label for="number">Number</label>
+    <input type="text" name="number" id="number">
+</div>
 
-<input type="number" name="factor" id="factor">
+<div class="factor">
+    <label for="number">Factor</label>
+    <input type="number" name="factor" id="factor">
+
+</div>
 
 <p>
     initial input value: {{ initialValue$ | async }}
 </p>
 
-<p>
-    {{ number$ | async }}
-</p>
+@if (isNumber$) {
+    <p>
+        {{ number$ | async }}
+    </p>
+
+} @else {
+    <p>
+        {{ number$ | async }}
+    </p>
+}

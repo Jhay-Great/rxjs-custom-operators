@@ -1,0 +1,7 @@
+div {
+    display: flex;
+    gap: 10px;
+}
+.factor {
+    margin-top: 1rem;
+}

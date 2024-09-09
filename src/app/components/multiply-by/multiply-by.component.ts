@@ -14,6 +14,7 @@ import { CommonModule } from '@angular/common';
 export class MultiplyByComponent implements OnInit {
 
   number$!:Observable<number>;
+  isNumber$!:Observable<boolean>;
   initialValue$!:Observable<any>;
 
   constructor (
@@ -45,6 +46,13 @@ export class MultiplyByComponent implements OnInit {
     )
 
     this.number$ = this.customOperatorService.multiplication(this.initialValue$, sourceFactor$);
+
+    this.isNumber$ = this.number$.pipe(
+      map(value => {
+        if (typeof value === 'number') return true;
+        return false;
+      })
+    )
 
 
   }
